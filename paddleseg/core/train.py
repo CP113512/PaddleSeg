@@ -17,6 +17,7 @@ import time
 from collections import deque
 import shutil
 
+import wandb
 import paddle
 import paddle.nn.functional as F
 
@@ -94,12 +95,13 @@ def train(model,
         keep_checkpoint_max (int, optional): Maximum number of checkpoints to save. Default: 5.
         test_config(dict, optional): Evaluation config.
         precision (str, optional): Use AMP if precision='fp16'. If precision='fp32', the training is normal.
-        amp_level (str, optional): Auto mixed precision level. Accepted values are “O1” and “O2”: O1 represent mixed precision, 
-            the input data type of each operator will be casted by white_list and black_list; O2 represent Pure fp16, all operators 
+        amp_level (str, optional): Auto mixed precision level. Accepted values are “O1” and “O2”: O1 represent mixed precision,
+            the input data type of each operator will be casted by white_list and black_list; O2 represent Pure fp16, all operators
             parameters and input data will be casted to fp16, except operators in black_list, don’t support fp16 kernel and batchnorm. Default is O1(amp)
         profiler_options (str, optional): The option of train profiler.
         to_static_training (bool, optional): Whether to use @to_static for training.
     """
+
     model.train()
     nranks = paddle.distributed.ParallelEnv().nranks
     local_rank = paddle.distributed.ParallelEnv().local_rank
@@ -278,7 +280,7 @@ def train(model,
                 if test_config is None:
                     test_config = {}
 
-                mean_iou, acc, _, _, _ = evaluate(
+                mean_iou, acc, class_iou, class_precision, kappa = evaluate(
                     model,
                     val_dataset,
                     num_workers=num_workers,
@@ -313,10 +315,11 @@ def train(model,
                     logger.info(
                         '[EVAL] The model with the best validation mIoU ({:.4f}) was saved at iter {}.'
                         .format(best_mean_iou, best_model_iter))
-
+                    wandb.log({'best_mean_iou': best_mean_iou, 'best_model_iter': best_model_iter, 'class_iou': class_iou,'class_precision': class_precision, 'kappa':kappa})
                     if use_vdl:
                         log_writer.add_scalar('Evaluate/mIoU', mean_iou, iter)
                         log_writer.add_scalar('Evaluate/Acc', acc, iter)
+                        wandb.log({'Evaluate/mIoU': mean_iou, 'Evaluate/Acc': acc})
             batch_start = time.time()
 
     # Calculate flops.

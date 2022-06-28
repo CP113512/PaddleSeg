@@ -17,6 +17,7 @@ import random
 
 import paddle
 import numpy as np
+import wandb
 
 from paddleseg.cvlibs import manager, Config
 from paddleseg.utils import get_sys_env, logger, config_check
@@ -226,5 +227,13 @@ def main(args):
 
 
 if __name__ == '__main__':
+    wandb.init(
+        project='paddle',
+        entity='wai',
+        reinit=True,
+        name='notion',
+        id='notion'
+    )
     args = parse_args()
+    wandb.config.update(args)
     main(args)
