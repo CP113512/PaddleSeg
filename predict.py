@@ -28,19 +28,19 @@ def parse_args():
 
     # params of prediction
     parser.add_argument(
-        "--config", dest="cfg", help="The config file.", default=None, type=str)
+        "--config", dest="cfg", help="The config file.", default='configs/deeplabv3p/deeplabv3p_resnet101_os8_rice_512x512_40k.yml', type=str)
     parser.add_argument(
         '--model_path',
         dest='model_path',
         help='The path of model for prediction',
         type=str,
-        default=None)
+        default='output/model.pdparams')
     parser.add_argument(
         '--image_path',
         dest='image_path',
         help='The image to predict, which can be a path of image, or a file list containing image paths, or a directory including images',
         type=str,
-        default=None)
+        default='dataset/val.txt')
     parser.add_argument(
         '--save_dir',
         dest='save_dir',

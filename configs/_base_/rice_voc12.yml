@@ -23,8 +23,6 @@ val_dataset:
   val_path: dataset/val.txt
   num_classes: 5
   transforms:
-    - type: RandomPaddingCrop
-      crop_size: [ 512, 512 ]
     - type: Normalize
   mode: val
 

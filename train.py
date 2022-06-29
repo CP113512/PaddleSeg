@@ -228,12 +228,11 @@ def main(args):
 
 if __name__ == '__main__':
     wandb.init(
-        project='paddle',
+        project='paddlerice',
         entity='wai',
-        reinit=True,
-        name='notion',
-        id='notion'
+        reinit=True
     )
+    # wandb.login(host='http://49.232.164.26:21735',key='local-ba59262788936dfd44027daa995cb538d67463cb')
     args = parse_args()
     wandb.config.update(args)
     main(args)

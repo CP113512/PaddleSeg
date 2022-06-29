@@ -315,7 +315,10 @@ def train(model,
                     logger.info(
                         '[EVAL] The model with the best validation mIoU ({:.4f}) was saved at iter {}.'
                         .format(best_mean_iou, best_model_iter))
-                    wandb.log({'best_mean_iou': best_mean_iou, 'best_model_iter': best_model_iter, 'class_iou': class_iou,'class_precision': class_precision, 'kappa':kappa})
+                    wandb.log({'best_mean_iou': best_mean_iou, 'best_model_iter': best_model_iter,
+                               'bg_iou': class_iou[0], 'leaf_iou': class_iou[1], 'brownspot_iou': class_iou[2], 'blast_iou': class_iou[3], 'bacterialblight_iou': class_iou[4],
+                               'bg_precision': class_precision[0], 'leaf_precision': class_precision[1], 'brownspot_precision': class_precision[2], 'blast_precision': class_precision[3], 'bacterialblight_precision': class_precision[4],
+                               'kappa':kappa})
                     if use_vdl:
                         log_writer.add_scalar('Evaluate/mIoU', mean_iou, iter)
                         log_writer.add_scalar('Evaluate/Acc', acc, iter)

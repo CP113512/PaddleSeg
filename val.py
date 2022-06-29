@@ -44,13 +44,13 @@ def parse_args():
 
     # params of evaluate
     parser.add_argument(
-        "--config", dest="cfg", help="The config file.", default=None, type=str)
+        "--config", dest="cfg", help="The config file.", default='configs/deeplabv3p/deeplabv3p_resnet101_os8_rice_512x512_40k.yml', type=str)
     parser.add_argument(
         '--model_path',
         dest='model_path',
         help='The path of model for evaluation',
         type=str,
-        default=None)
+        default='output/model.pdparams')
     parser.add_argument(
         '--num_workers',
         dest='num_workers',
