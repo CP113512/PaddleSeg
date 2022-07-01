@@ -18,11 +18,13 @@ import random
 import paddle
 import numpy as np
 import wandb
+import os
 
 from paddleseg.cvlibs import manager, Config
 from paddleseg.utils import get_sys_env, logger, config_check
 from paddleseg.core import train
 
+os.environ["WANDB_MODE"] = "offline"
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Model training')
